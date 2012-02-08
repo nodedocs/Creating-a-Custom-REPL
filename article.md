@@ -5,7 +5,7 @@ Node allows users to create their own REPLs with the "repl" module. Its basic us
     var repl = require('repl');
     repl.start(prompt, stream);
 
-The first argument, `prompt`, is a string that's used for the prompt of your REPL and defaults to "> ". `stream` is the stream that the repl listens on and defaults to `process.stdin`. When you run `node` from the command prompt, what it's doing in the background is running `repl.start()` to give you the standard REPL.
+The first argument, `prompt`, is a string that's used for the prompt of your REPL and defaults to "> ". The second argument, `stream` is the stream that the REPL listens on and defaults to `process.stdin`. When you run `node` from the command prompt, what it's doing in the background is running `repl.start()` to give you the standard REPL.
 
 However, the repl is pretty flexible. Here's an example that shows this off:
 
