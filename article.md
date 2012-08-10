@@ -2,38 +2,42 @@
 
 Node allows users to create their own REPLs with the "repl" module. Its basic use looks like this:
 
-    var repl = require('repl');
-    repl.start(prompt, stream);
+```javascript
+var repl = require('repl');
+repl.start(prompt, stream);
+```
 
 The first argument, `prompt`, is a string that's used for the prompt of your REPL and defaults to "> ". The second argument, `stream` is the stream that the REPL listens on and defaults to `process.stdin`. When you run `node` from the command prompt, what it's doing in the background is running `repl.start()` to give you the standard REPL.
 
 However, the repl is pretty flexible. Here's an example that shows this off:
 
-    #!/usr/bin/env node
+```javascript
+#!/usr/bin/env node
 
-    var net = require("net"),
-        repl = require("repl");
+var net = require("net"),
+    repl = require("repl");
 
-    var mood = function () {
-        var m = [ "^__^", "-___-;", ">.<", "<_>" ];
-        return m[Math.floor(Math.random()*m.length)];
-    };
+var mood = function () {
+    var m = [ "^__^", "-___-;", ">.<", "<_>" ];
+    return m[Math.floor(Math.random()*m.length)];
+};
 
-    //A remote node repl that you can telnet to!
-    net.createServer(function (socket) {
-      var remote = repl.start("node::remote> ", socket);
-      //Adding "mood" and "bonus" to the remote REPL's context.
-      remote.context.mood = mood;
-      remote.context.bonus = "UNLOCKED";
-    }).listen(5001);
+//A remote node repl that you can telnet to!
+net.createServer(function (socket) {
+  var remote = repl.start("node::remote> ", socket);
+  //Adding "mood" and "bonus" to the remote REPL's context.
+  remote.context.mood = mood;
+  remote.context.bonus = "UNLOCKED";
+}).listen(5001);
 
-    console.log("Remote REPL started on port 5001.");
+console.log("Remote REPL started on port 5001.");
 
-    //A "local" node repl with a custom prompt
-    var local = repl.start("node::local> ");
+//A "local" node repl with a custom prompt
+var local = repl.start("node::local> ");
 
-    // Exposing the function "mood" to the local REPL's context.
-    local.context.mood = mood;
+// Exposing the function "mood" to the local REPL's context.
+local.context.mood = mood;
+```
 
 This script creates *two* REPLs: One is normal excepting for its custom prompt, but the *other* is exposed via the net module so I can telnet to it! In addition, it uses the `context` property to expose the function "mood" to both REPLs, and the "bonus" string to the remote REPL only. As you will see, this approach of trying to expose objects to one REPL and not the other *doesn't really work*.
 
